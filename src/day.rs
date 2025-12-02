@@ -1,5 +1,6 @@
 #[allow(unused)]
 pub trait Day {
-    fn solve0(input: &str) -> i64;
-    fn solve1(input: &str) -> i64;
+    fn new(input: &str) -> Self;
+    fn solve0(&self) -> i64;
+    fn solve1(&self) -> i64;
 }

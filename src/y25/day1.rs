@@ -1,14 +1,24 @@
+use std::str::FromStr;
 use crate::day::Day;
 
 pub struct Day1 {
-
+    rotations: Vec<(i64, i64)>
 }
 
 impl Day for Day1 {
-    fn solve0(input: &str) -> i64 {
-        input.lines()
+    fn new(input: &str) -> Self {
+        let rotations: Vec<(i64, i64)> = input.lines()
             .map(|l| l.split_at(1))
-            .map(|(d, n)| Self::dir(d) * n.parse::<i64>().unwrap())
+            .map(|(d, n)| (Self::dir(d), i64::from_str(n).unwrap()))
+            .collect();
+        Self {
+            rotations
+        }
+    }
+
+    fn solve0(&self) -> i64 {
+        self.rotations.iter()
+            .map(|(d, n)| d * n)
             .fold((50, 0), |(i, res), n| {
                 let i = Self::add(i, n);
                 let res = res + if i == 0 { 1 } else { 0 };
@@ -16,10 +26,9 @@ impl Day for Day1 {
             }).1
     }
 
-    fn solve1(input: &str) -> i64 {
-        input.lines()
-            .map(|l| l.split_at(1))
-            .map(|(d, n)| [Self::dir(d)].repeat(n.parse::<usize>().unwrap()))
+    fn solve1(&self) -> i64 {
+        self.rotations.iter()
+            .map(|(d, n)| [*d].repeat(*n as usize))
             .flatten()
             .fold((50, 0), |(i, res), n| {
                 let i = Self::add(i, n);

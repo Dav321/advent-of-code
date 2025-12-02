@@ -7,11 +7,15 @@ pub struct DayX {
 
 #[allow(unused_variables)]
 impl Day for DayX {
-    fn solve0(input: &str) -> i64 {
+    fn new(input: &str) -> Self {
         todo!()
     }
 
-    fn solve1(input: &str) -> i64 {
+    fn solve0(&self) -> i64 {
+        todo!()
+    }
+
+    fn solve1(&self) -> i64 {
         todo!()
     }
 }

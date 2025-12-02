@@ -4,16 +4,25 @@ use std::str::FromStr;
 
 #[allow(dead_code)]
 pub struct Day2 {
-
+    ranges: Vec<(i64, i64)>
 }
 
 #[allow(unused_variables)]
 impl Day for Day2 {
-    fn solve0(input: &str) -> i64 {
-        let ranges = Self::parse(input);
+    fn new(input: &str) -> Self {
+        let ranges = input.split(",")
+            .map(|s| s.split_once("-").unwrap())
+            .map(|(x, y)|
+                (i64::from_str(x).unwrap(), i64::from_str(y).unwrap()))
+            .collect();
+        Self {
+            ranges
+        }
+    }
 
+    fn solve0(&self) -> i64 {
         let mut res = 0;
-        for (range_start, range_end) in ranges {
+        for (range_start, range_end) in self.ranges.clone() {
             let mut start_decimals = Self::decimal_count(range_start) / 2;
             let end_decimals = Self::decimal_count(range_end) / 2;
 
@@ -36,11 +45,9 @@ impl Day for Day2 {
         res
     }
 
-    fn solve1(input: &str) -> i64 {
-        let ranges = Self::parse(input);
-
+    fn solve1(&self) -> i64 {
         let mut res = HashSet::new();
-        for (range_start, range_end) in ranges {
+        for (range_start, range_end) in self.ranges.clone() {
             let end_decimals = Self::decimal_count(range_end) / 2;
             let end = 10i64.pow(end_decimals);
 
@@ -64,14 +71,6 @@ impl Day for Day2 {
 }
 
 impl Day2 {
-    fn parse(input: &str) -> Vec<(i64, i64)> {
-        input.split(",")
-            .map(|s| s.split_once("-").unwrap())
-            .map(|(x, y)|
-                (i64::from_str(x).unwrap(), i64::from_str(y).unwrap()))
-            .collect()
-    }
-
     fn decimal_count(n: i64) -> u32 {
         n.to_string().chars().count() as u32
     }
