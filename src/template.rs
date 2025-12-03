@@ -16,6 +16,6 @@ impl Day for DayX {
     }
 
     fn solve1(&self) -> i64 {
-        todo!()
+        0
     }
 }
