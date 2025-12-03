@@ -33,7 +33,22 @@ impl Day for Day3 {
     }
 
     fn solve1(&self) -> i64 {
-        0
+        let mut res = 0;
+        for bank in self.banks.clone() {
+            let mut joltage = 0;
+            let mut prev_i = 0;
+            for i in 0..11 {
+                let slice = &bank[prev_i..(bank.len() - (11 - i))];
+                let (val, val_i) = Day3::first_max(slice, 9);
+                joltage += val as i64 * 10i64.pow((11 - i) as u32);
+                prev_i += val_i + 1;
+            }
+
+            let (last, _) = Day3::first_max(&bank[prev_i..], 9);
+            joltage += last as i64;
+            res += joltage;
+        }
+        res
     }
 }
 
