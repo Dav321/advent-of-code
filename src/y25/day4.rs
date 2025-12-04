@@ -15,7 +15,7 @@ impl Day for Day4 {
             .collect();
 
         Self {
-            map: Map2d::new(map),
+            map: Map2d::new(map).rotate(),
         }
     }
 
@@ -37,6 +37,22 @@ impl Day for Day4 {
     }
 
     fn solve1(&self) -> i64 {
-        0
+        let mut last = self.map.count(&|cell| *cell);
+        let initial = last;
+        let mut current = last + 1;
+        let mut map = self.map.clone();
+        
+        while current != last {
+            map = map.map(|cell, p| {
+                if !*cell { return false; }
+                let n = map.neighbours(p, true)
+                    .iter().filter(|p| *map.get(**p)).count();
+                n >= 4
+            });
+            last = current;
+            current = map.count(&|cell| *cell);
+        }
+
+        (initial - current) as i64
     }
 }

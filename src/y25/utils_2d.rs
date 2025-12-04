@@ -25,6 +25,17 @@ where
         (self.map.len(), self.map[0].len())
     }
 
+    pub fn rotate(&self) -> Map2d<T> {
+        let mut new = self.map.clone();
+        let (x_max, y_max) = self.size();
+        for x in 0..x_max {
+            for y in 0..y_max {
+                new[y][x] = self.map[x][y].clone();
+            }
+        }
+        Map2d::new(new)
+    }
+
     pub fn count(&self, filter: &dyn Fn(&T) -> bool) -> usize {
         let mut res = 0;
         let (x_max, y_max) = self.size();
