@@ -11,7 +11,7 @@ pub struct Day5 {
 #[allow(unused_variables)]
 impl Day for Day5 {
     fn new(input: &str) -> Self {
-        let (input_fresh, input_available) = input.split_once("\n\n").expect("invalid input");
+        let (input_fresh, input_available) = input.split_once("\r\n\r\n").expect("invalid input");
         let fresh = input_fresh
             .lines()
             .map(|l| l.split_once("-").expect("no range"))
@@ -35,6 +35,21 @@ impl Day for Day5 {
     }
 
     fn solve1(&self) -> i64 {
-        0
+        let mut ranges = self.fresh.clone();
+        ranges.sort_by_key(|r| *r.start());
+
+        let mut merged = Vec::new();
+        let mut prev = ranges.first().cloned().expect("no ranges");
+        for r in ranges.into_iter().skip(1) {
+            if *r.start() <= prev.end() + 1 {
+                prev = *prev.start()..=*prev.end().max(r.end())
+            } else {
+                merged.push(prev);
+                prev = r;
+            }
+        }
+        merged.push(prev);
+
+        merged.iter().map(|r| r.end() - r.start() + 1).sum()
     }
 }

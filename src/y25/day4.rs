@@ -41,12 +41,17 @@ impl Day for Day4 {
         let initial = last;
         let mut current = last + 1;
         let mut map = self.map.clone();
-        
+
         while current != last {
             map = map.map(|cell, p| {
-                if !*cell { return false; }
-                let n = map.neighbours(p, true)
-                    .iter().filter(|p| *map.get(**p)).count();
+                if !*cell {
+                    return false;
+                }
+                let n = map
+                    .neighbours(p, true)
+                    .iter()
+                    .filter(|p| *map.get(**p))
+                    .count();
                 n >= 4
             });
             last = current;
