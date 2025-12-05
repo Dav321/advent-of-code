@@ -5,7 +5,10 @@ pub struct Map2d<T> {
     map: Vec<Vec<T>>,
 }
 
-impl<T> Map2d<T> where T: Clone {
+impl<T> Map2d<T>
+where
+    T: Clone,
+{
     pub fn new(map: Vec<Vec<T>>) -> Self {
         Self { map }
     }
@@ -17,7 +20,7 @@ impl<T> Map2d<T> where T: Clone {
     pub fn set(&mut self, p: Point2d, value: T) {
         self.map[p.x][p.y] = value;
     }
-    
+
     pub fn size(&self) -> (usize, usize) {
         (self.map.len(), self.map[0].len())
     }
@@ -114,8 +117,7 @@ impl Point2d {
     }
 
     pub fn inside(&self, x_min: usize, y_min: usize, x_max: usize, y_max: usize) -> bool {
-        self.x >= x_min && self.y >= y_min &&
-        self.x < x_max && self.y < y_max
+        self.x >= x_min && self.y >= y_min && self.x < x_max && self.y < y_max
     }
 }
 

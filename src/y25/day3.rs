@@ -1,5 +1,5 @@
-use std::str::FromStr;
 use crate::day::Day;
+use std::str::FromStr;
 
 #[allow(dead_code)]
 pub struct Day3 {
@@ -9,23 +9,23 @@ pub struct Day3 {
 #[allow(unused_variables)]
 impl Day for Day3 {
     fn new(input: &str) -> Self {
-        let banks = input.lines()
-            .map(|l|
+        let banks = input
+            .lines()
+            .map(|l| {
                 l.chars()
                     .map(|s| u8::from_str(&s.to_string()).unwrap())
-                    .collect())
+                    .collect()
+            })
             .collect();
 
-        Self {
-            banks
-        }
+        Self { banks }
     }
 
     fn solve0(&self) -> i64 {
         let mut res = 0;
         for bank in self.banks.clone() {
-            let (first, first_i) = Day3::first_max(&bank[..bank.len()-1], 9);
-            let (second, second_i) = Day3::first_max(&bank[first_i+1..], 9);
+            let (first, first_i) = Day3::first_max(&bank[..bank.len() - 1], 9);
+            let (second, second_i) = Day3::first_max(&bank[first_i + 1..], 9);
             let joltage = (first as i64 * 10) + second as i64;
             res += joltage;
         }

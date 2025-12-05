@@ -4,20 +4,18 @@ use std::str::FromStr;
 
 #[allow(dead_code)]
 pub struct Day2 {
-    ranges: Vec<(i64, i64)>
+    ranges: Vec<(i64, i64)>,
 }
 
 #[allow(unused_variables)]
 impl Day for Day2 {
     fn new(input: &str) -> Self {
-        let ranges = input.split(",")
+        let ranges = input
+            .split(",")
             .map(|s| s.split_once("-").unwrap())
-            .map(|(x, y)|
-                (i64::from_str(x).unwrap(), i64::from_str(y).unwrap()))
+            .map(|(x, y)| (i64::from_str(x).unwrap(), i64::from_str(y).unwrap()))
             .collect();
-        Self {
-            ranges
-        }
+        Self { ranges }
     }
 
     fn solve0(&self) -> i64 {

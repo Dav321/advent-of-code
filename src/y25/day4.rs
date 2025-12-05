@@ -20,12 +20,20 @@ impl Day for Day4 {
     }
 
     fn solve0(&self) -> i64 {
-        self.map.map(|cell, p| {
-            if !*cell { return false; }
-            let n = self.map.neighbours(p, true)
-                .iter().filter(|p| *self.map.get(**p)).count();
-            n < 4
-        }).count(&|p| *p) as i64
+        self.map
+            .map(|cell, p| {
+                if !*cell {
+                    return false;
+                }
+                let n = self
+                    .map
+                    .neighbours(p, true)
+                    .iter()
+                    .filter(|p| *self.map.get(**p))
+                    .count();
+                n < 4
+            })
+            .count(&|p| *p) as i64
     }
 
     fn solve1(&self) -> i64 {

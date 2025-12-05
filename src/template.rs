@@ -1,9 +1,7 @@
 use crate::day::Day;
 
 #[allow(dead_code)]
-pub struct DayX {
-
-}
+pub struct DayX {}
 
 #[allow(unused_variables)]
 impl Day for DayX {
