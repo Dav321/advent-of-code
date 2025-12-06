@@ -25,8 +25,11 @@ where
         (self.map.len(), self.map[0].len())
     }
 
-    pub fn rotate(&self) -> Map2d<T> {
-        let mut new = self.map.clone();
+    pub fn rotate(&self) -> Map2d<T>
+    where
+        T: Default,
+    {
+        let mut new: Vec<Vec<T>> = vec![vec![T::default(); self.map.len()]; self.map[0].len()];
         let (x_max, y_max) = self.size();
         for x in 0..x_max {
             for y in 0..y_max {
@@ -60,6 +63,10 @@ where
         Map2d::new(new)
     }
 
+    pub fn inner(&self) -> Vec<Vec<T>> {
+        self.map.clone()
+    }
+
     pub fn neighbours(&self, p: Point2d, vertical: bool) -> Vec<Point2d> {
         let mut res = vec![p.up(), p.down(), p.left(), p.right()];
         if vertical {
@@ -77,7 +84,7 @@ where
             .collect()
     }
 
-    pub fn print(&self, fmt: &dyn Fn(&T) -> &str) {
+    pub fn print(&self, fmt: impl Fn(&T) -> String) {
         let (x_max, y_max) = self.size();
         for y in 0..y_max {
             for x in 0..x_max {
