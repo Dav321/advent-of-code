@@ -1,11 +1,13 @@
 use crate::day::Day;
 use crate::y25::utils_2d::Map2d;
+use std::str::FromStr;
 
 #[allow(dead_code)]
 pub struct Day6 {
     numbers: Map2d<i64>,
     /// true -> +, false -> *
     operators: Vec<bool>,
+    char_map: Map2d<char>,
 }
 
 #[allow(unused_variables)]
@@ -32,7 +34,13 @@ impl Day for Day6 {
             .map(|c| c == '+')
             .collect();
 
-        Self { numbers, operators }
+        let char_map = Map2d::new(lines.iter().map(|l| l.chars().collect()).collect()).rotate();
+
+        Self {
+            numbers,
+            operators,
+            char_map,
+        }
     }
 
     fn solve0(&self) -> i64 {
@@ -40,18 +48,52 @@ impl Day for Day6 {
 
         let mut res = 0;
         for i in 0..self.operators.len() {
-            let iter = nums[i].iter();
-            if self.operators[i] {
-                res += iter.sum::<i64>();
-            } else {
-                res += iter.product::<i64>();
-            }
+            res += Self::compute(&nums[i], self.operators[i]);
         }
 
         res
     }
 
     fn solve1(&self) -> i64 {
-        0
+        let map = self.char_map.inner();
+
+        let mut res = 0;
+        let mut operator = false;
+        let mut nums: Vec<i64> = vec![];
+
+        let (x_max, y_max) = self.char_map.size();
+        for x in 0..x_max {
+            let mut digit = String::new();
+            for y in 0..y_max {
+                let c = map[x][y];
+                match c {
+                    '*' => operator = false,
+                    '+' => operator = true,
+                    ' ' => continue,
+                    '0'..='9' => digit.push(c),
+                    _ => panic!("Invalid char: {}", c),
+                }
+            }
+            if digit.is_empty() {
+                res += Self::compute(&nums, operator);
+                nums.clear();
+                continue;
+            }
+
+            nums.push(i64::from_str(digit.as_str()).unwrap());
+        }
+
+        res + Self::compute(&nums, operator)
+    }
+}
+
+impl Day6 {
+    fn compute(nums: &Vec<i64>, operator: bool) -> i64 {
+        let iter = nums.iter();
+        if operator {
+            iter.sum::<i64>()
+        } else {
+            iter.product::<i64>()
+        }
     }
 }
