@@ -1,5 +1,5 @@
 use crate::day::Day;
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 
 #[allow(dead_code)]
 pub struct Day7 {
@@ -21,17 +21,16 @@ impl Day for Day7 {
 
     fn solve0(&self) -> i64 {
         let map = self.map.clone();
-        let start = map.first().unwrap().iter().position(|b| *b);
-        let start = start.unwrap();
+        let start = map.first().unwrap().iter().position(|b| *b).unwrap();
 
         let mut res = 0;
         let mut positions = HashSet::from([start]);
         for line in map.iter().skip(1) {
             for pos in positions.clone() {
                 if line[pos] {
-                    // no clamping needed because of gap in puzzle input
                     res += 1;
                     positions.remove(&pos);
+                    // no clamping needed because of gap in puzzle input
                     positions.insert(pos - 1);
                     positions.insert(pos + 1);
                 }
@@ -42,6 +41,21 @@ impl Day for Day7 {
     }
 
     fn solve1(&self) -> i64 {
-        0
+        let map = self.map.clone();
+        let start = map.first().unwrap().iter().position(|b| *b).unwrap();
+
+        let mut positions = HashMap::from([(start, 1)]);
+        for line in map.iter().skip(1) {
+            for (pos, n) in positions.clone() {
+                if line[pos] {
+                    positions.remove(&pos);
+                    // no clamping needed because of gap in puzzle input
+                    positions.insert(pos - 1, n + positions.get(&(pos - 1)).unwrap_or(&0));
+                    positions.insert(pos + 1, n + positions.get(&(pos + 1)).unwrap_or(&0));
+                }
+            }
+        }
+
+        positions.values().sum()
     }
 }
