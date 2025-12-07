@@ -1,5 +1,6 @@
 /target
 .idea
 input.txt
+test.txt
 Cargo.lock
 .git
