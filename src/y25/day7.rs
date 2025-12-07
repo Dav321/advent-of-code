@@ -1,0 +1,47 @@
+use crate::day::Day;
+use std::collections::HashSet;
+
+#[allow(dead_code)]
+pub struct Day7 {
+    map: Vec<Vec<bool>>,
+}
+
+#[allow(unused_variables)]
+impl Day for Day7 {
+    fn new(input: &str) -> Self {
+        let map = input
+            .lines()
+            .map(|s| s.chars().map(|c| c != '.').collect::<Vec<_>>())
+            // Filter empty lines
+            .filter(|v| v.iter().any(|b| *b))
+            .collect();
+
+        Self { map }
+    }
+
+    fn solve0(&self) -> i64 {
+        let map = self.map.clone();
+        let start = map.first().unwrap().iter().position(|b| *b);
+        let start = start.unwrap();
+
+        let mut res = 0;
+        let mut positions = HashSet::from([start]);
+        for line in map.iter().skip(1) {
+            for pos in positions.clone() {
+                if line[pos] {
+                    // no clamping needed because of gap in puzzle input
+                    res += 1;
+                    positions.remove(&pos);
+                    positions.insert(pos - 1);
+                    positions.insert(pos + 1);
+                }
+            }
+        }
+
+        res
+    }
+
+    fn solve1(&self) -> i64 {
+        0
+    }
+}
