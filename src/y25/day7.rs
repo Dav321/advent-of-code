@@ -1,12 +1,10 @@
 use crate::day::Day;
 use std::collections::{HashMap, HashSet};
 
-#[allow(dead_code)]
 pub struct Day7 {
     map: Vec<Vec<bool>>,
 }
 
-#[allow(unused_variables)]
 impl Day for Day7 {
     fn new(input: &str) -> Self {
         let map = input

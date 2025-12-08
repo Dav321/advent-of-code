@@ -2,7 +2,6 @@ use crate::day::Day;
 use crate::y25::utils_2d::Map2d;
 use std::str::FromStr;
 
-#[allow(dead_code)]
 pub struct Day6 {
     numbers: Map2d<i64>,
     /// true -> +, false -> *
@@ -10,7 +9,6 @@ pub struct Day6 {
     char_map: Map2d<char>,
 }
 
-#[allow(unused_variables)]
 impl Day for Day6 {
     fn new(input: &str) -> Self {
         let lines = input.lines().collect::<Vec<_>>();

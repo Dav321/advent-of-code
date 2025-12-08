@@ -1,12 +1,10 @@
 use crate::day::Day;
 use crate::y25::utils_2d::Map2d;
 
-#[allow(dead_code)]
 pub struct Day4 {
     map: Map2d<bool>,
 }
 
-#[allow(unused_variables)]
 impl Day for Day4 {
     fn new(input: &str) -> Self {
         let map = input

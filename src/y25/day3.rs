@@ -1,12 +1,10 @@
 use crate::day::Day;
 use std::str::FromStr;
 
-#[allow(dead_code)]
 pub struct Day3 {
     banks: Vec<Box<[u8]>>,
 }
 
-#[allow(unused_variables)]
 impl Day for Day3 {
     fn new(input: &str) -> Self {
         let banks = input
@@ -25,7 +23,7 @@ impl Day for Day3 {
         let mut res = 0;
         for bank in self.banks.clone() {
             let (first, first_i) = Day3::first_max(&bank[..bank.len() - 1], 9);
-            let (second, second_i) = Day3::first_max(&bank[first_i + 1..], 9);
+            let (second, _second_i) = Day3::first_max(&bank[first_i + 1..], 9);
             let joltage = (first as i64 * 10) + second as i64;
             res += joltage;
         }

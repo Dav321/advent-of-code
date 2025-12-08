@@ -2,13 +2,11 @@ use crate::day::Day;
 use std::ops::RangeInclusive;
 use std::str::FromStr;
 
-#[allow(dead_code)]
 pub struct Day5 {
     fresh: Vec<RangeInclusive<i64>>,
     available: Vec<i64>,
 }
 
-#[allow(unused_variables)]
 impl Day for Day5 {
     fn new(input: &str) -> Self {
         let (input_fresh, input_available) = input.split_once("\r\n\r\n").expect("invalid input");

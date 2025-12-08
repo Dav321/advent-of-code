@@ -2,12 +2,10 @@ use crate::day::Day;
 use std::collections::HashSet;
 use std::str::FromStr;
 
-#[allow(dead_code)]
 pub struct Day2 {
     ranges: Vec<(i64, i64)>,
 }
 
-#[allow(unused_variables)]
 impl Day for Day2 {
     fn new(input: &str) -> Self {
         let ranges = input
