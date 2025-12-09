@@ -1,5 +1,5 @@
 use crate::day::Day;
-use crate::y25::day8::Day8 as CurrentDay;
+use crate::y25::day9::Day9 as CurrentDay;
 
 pub fn run() {
     let day = CurrentDay::new(include_str!("../../input.txt"));

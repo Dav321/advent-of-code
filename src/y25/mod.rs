@@ -6,6 +6,7 @@ mod day5;
 mod day6;
 mod day7;
 mod day8;
+mod day9;
 mod utils_2d;
 mod utils_3d;
 pub mod y25;
