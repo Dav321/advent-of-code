@@ -144,3 +144,115 @@ impl Display for Point2d {
         write!(f, "({}, {})", self.x, self.y)
     }
 }
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct Rect2d {
+    pub top_left: Point2d,
+    pub bottom_right: Point2d,
+}
+
+impl Rect2d {
+    pub fn new(p1: &Point2d, p2: &Point2d) -> Self {
+        let top_left = Point2d::new(p1.x.min(p2.x), p1.y.min(p2.y));
+        let bottom_right = Point2d::new(p1.x.max(p2.x), p1.y.max(p2.y));
+        Self {
+            top_left,
+            bottom_right,
+        }
+    }
+
+    pub fn size(&self) -> (usize, usize) {
+        let width = self.bottom_right.x - self.top_left.x + 1;
+        let height = self.bottom_right.y - self.top_left.y + 1;
+        (width, height)
+    }
+
+    pub fn area(&self) -> usize {
+        let (w, h) = self.size();
+        w * h
+    }
+
+    pub fn points(&self) -> [Point2d; 4] {
+        [
+            self.top_left,
+            Point2d::new(self.top_left.x, self.bottom_right.y),
+            self.bottom_right,
+            Point2d::new(self.bottom_right.x, self.top_left.y),
+        ]
+    }
+
+    pub fn shrink(&self, n: usize) -> Self {
+        Self::new(
+            &Point2d::new(self.top_left.x + n, self.top_left.y + n),
+            &Point2d::new(self.bottom_right.x - n, self.bottom_right.y - n),
+        )
+    }
+
+    pub fn lines(&self) -> [Line2d; 4] {
+        let [p1, p2, p3, p4] = self.points();
+        [
+            Line2d::new(p1, p2),
+            Line2d::new(p2, p3),
+            Line2d::new(p3, p4),
+            Line2d::new(p4, p1),
+        ]
+    }
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct Line2d {
+    pub start: Point2d,
+    pub end: Point2d,
+}
+
+impl Line2d {
+    pub fn new(start: Point2d, end: Point2d) -> Self {
+        Self { start, end }
+    }
+
+    pub fn horizontal(&self) -> bool {
+        self.start.y == self.end.y
+    }
+
+    pub fn vertical(&self) -> bool {
+        self.start.x == self.end.x
+    }
+
+    pub fn intersects_hv(&self, other: Line2d) -> bool {
+        assert!(self.horizontal() || self.vertical());
+        assert!(other.horizontal() || other.vertical());
+        if self.vertical() {
+            if other.horizontal() {
+                let x = self.start.x;
+                let y = other.start.y;
+
+                let (x1, x2) = (
+                    other.start.x.min(other.end.x),
+                    other.start.x.max(other.end.x),
+                );
+                let (y1, y2) = (self.start.y.min(self.end.y), self.start.y.max(self.end.y));
+
+                x >= x1 && x <= x2 && y >= y1 && y <= y2
+            } else {
+                false
+            }
+        } else if self.horizontal() {
+            if other.vertical() {
+                let y = self.start.y;
+                let x = other.start.x;
+
+                let (x1, x2) = (self.start.x.min(self.end.x), self.start.x.max(self.end.x));
+                let (y1, y2) = (
+                    other.start.y.min(other.end.y),
+                    other.start.y.max(other.end.y),
+                );
+
+                x >= x1 && x <= x2 && y >= y1 && y <= y2
+            } else {
+                false
+            }
+        } else {
+            unreachable!()
+        }
+    }
+}
