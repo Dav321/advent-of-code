@@ -5,6 +5,7 @@ use std::str::FromStr;
 pub struct Machine {
     lights: u32,
     buttons: Vec<u32>,
+    buttons_indices: Vec<Vec<usize>>,
     joltage: Vec<u32>,
 }
 
@@ -24,6 +25,28 @@ impl Machine {
                 }
                 visited.insert(num);
                 queue.push_back((num, presses));
+            }
+        }
+        unreachable!()
+    }
+
+    pub fn solve1(&self) -> u32 {
+        let mut visited = HashSet::new();
+        let mut queue = VecDeque::from([(vec![0; self.joltage.len()], 0)]);
+        while let Some((joltage, presses)) = queue.pop_front() {
+            let presses = presses + 1;
+            for button in &self.buttons_indices {
+                let mut joltage = joltage.clone();
+                button.iter().for_each(|i| joltage[*i] += 1);
+
+                if visited.contains(&joltage) {
+                    continue;
+                }
+                if joltage == self.joltage {
+                    return presses;
+                }
+                visited.insert(joltage.clone());
+                queue.push_back((joltage, presses));
             }
         }
         unreachable!()
@@ -65,10 +88,10 @@ impl Day for Day10 {
                     })
                     .collect();
 
-                let buttons = buttons_indices.iter()
+                let buttons = buttons_indices
+                    .iter()
                     .map(|n| n.iter().fold(0, |acc, i| acc | (1u32 << i)))
                     .collect();
-
 
                 let joltage = joltage
                     .trim_matches(&['{', '}'])
@@ -79,6 +102,7 @@ impl Day for Day10 {
                 Machine {
                     lights,
                     buttons,
+                    buttons_indices,
                     joltage,
                 }
             })
@@ -92,6 +116,6 @@ impl Day for Day10 {
     }
 
     fn solve1(&self) -> i64 {
-        0
+        self.machines.iter().map(Machine::solve1).sum::<u32>() as i64
     }
 }
