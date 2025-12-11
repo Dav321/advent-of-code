@@ -32,7 +32,24 @@ impl Day for Day11 {
     }
 
     fn solve1(&self) -> i64 {
-        0
+        let svr = Self::name_to_u32("svr");
+        let dac = Self::name_to_u32("dac");
+        let fft = Self::name_to_u32("fft");
+        let out = Self::name_to_u32("out");
+
+        let srv_dac = self.dfs(svr, dac, &mut HashMap::new());
+        let srv_fft = self.dfs(svr, fft, &mut HashMap::new());
+
+        let dac_fft = self.dfs(dac, fft, &mut HashMap::new());
+        let fft_dac = self.dfs(fft, dac, &mut HashMap::new());
+
+        let fft_out = self.dfs(fft, out, &mut HashMap::new());
+        let dac_out = self.dfs(dac, out, &mut HashMap::new());
+
+        let a = srv_dac * dac_fft * fft_out;
+        let b = srv_fft * fft_dac * dac_out;
+
+        a + b
     }
 }
 
